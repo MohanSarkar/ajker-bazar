@@ -1,9 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import CategoryBar from '../components/CategoryBar';
-import Marquee from '../components/Marquee';
-import HeroBanner from '../components/HeroBanner';
+import { use, useState } from 'react';
+import CategoryBar from '../../../components/CategoryBar';
+import Marquee from '../../../components/Marquee';
 
 interface Product {
   id: number;
@@ -55,8 +54,23 @@ const FALLBACK_PRODUCTS: Product[] = [
   { id: 31, slug: 'roshun', nameBn: 'রসুন', category: 'mosla', categoryNameBn: 'মসলা', categoryIcon: '🌶️', unit: 'kg', image: '🧄', today: 125, change: { dir: 'down', pct: -7.4 } },
 ];
 
-export default function HomePage() {
-  const [allProducts, setAllProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
+const categoryMeta: Record<string, { nameBn: string; icon: string }> = {
+  chal: { nameBn: 'চাল', icon: '🍚' },
+  dal: { nameBn: 'ডাল', icon: '🫘' },
+  tel: { nameBn: 'তেল', icon: '🛢️' },
+  sobji: { nameBn: 'সবজি', icon: '🥬' },
+  mach: { nameBn: 'মাছ', icon: '🐟' },
+  mangsho: { nameBn: 'মাংস', icon: '🍗' },
+  'dim-dui': { nameBn: 'ডিম-দুধ', icon: '🥛' },
+  mosla: { nameBn: 'মসলা', icon: '🌶️' },
+};
+
+export default function CategoryContent({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = use(params);
   const [sortBy, setSortBy] = useState<'default' | 'low-to-high' | 'high-to-low'>('default');
 
   const getUnitBn = (unit: string) => {
@@ -67,145 +81,103 @@ export default function HomePage() {
     return unit;
   };
 
-  const sortedProducts = [...allProducts].sort((a, b) => {
+  const currentMeta = categoryMeta[slug] || { nameBn: 'পণ্য', icon: '🛒' };
+  const filteredProducts = FALLBACK_PRODUCTS.filter((p) => p.category === slug);
+
+  const sortedProducts = [...filteredProducts].sort((a, b) => {
     if (sortBy === 'low-to-high') return a.today - b.today;
     if (sortBy === 'high-to-low') return b.today - a.today;
     return 0;
   });
 
-  const priceIncreasedProducts = allProducts.filter((p) => p.change?.dir === 'up').slice(0, 6);
-  const priceDecreasedProducts = allProducts.filter((p) => p.change?.dir === 'down').slice(0, 6);
-
-  const scrollToProducts = () => {
-    const element = document.getElementById('all-products-section');
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
-
   return (
     <div className="bg-[#f4f6f4] min-h-screen pb-16">
-      <CategoryBar />
-      <Marquee products={allProducts} />
-      <HeroBanner onSeeAllClick={scrollToProducts} />
+      <CategoryBar selectedCategory={slug} />
+      <Marquee products={FALLBACK_PRODUCTS} />
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-12">
-        {/* Section: Price Increased */}
-        {priceIncreasedProducts.length > 0 && (
-          <section className="space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="text-red-500 font-bold text-lg">▲</span>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                আজ দাম বেড়েছে
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {priceIncreasedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} getUnitBn={getUnitBn} />
-              ))}
-            </div>
-          </section>
-        )}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
+        {/* Category Header Banner */}
+        <div className="bg-white border border-gray-200/80 rounded-2xl p-6 flex items-center gap-4 shadow-xs">
+          <div className="w-14 h-14 bg-red-100/60 rounded-2xl flex items-center justify-center text-3xl shrink-0">
+            {currentMeta.icon}
+          </div>
+          <div>
+            <h1 className="text-2xl font-bold text-gray-900">{currentMeta.nameBn}</h1>
+            <p className="text-xs sm:text-sm text-gray-500 mt-1">
+              {sortedProducts.length}টি পণ্যের আজকের দাম ও পরিবর্তন
+            </p>
+          </div>
+        </div>
 
-        {/* Section: Price Decreased */}
-        {priceDecreasedProducts.length > 0 && (
-          <section className="space-y-4">
-            <div className="flex items-center gap-2">
-              <span className="text-green-600 font-bold text-lg">▼</span>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                আজ দাম কমেছে
-              </h2>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
-              {priceDecreasedProducts.map((product) => (
-                <ProductCard key={product.id} product={product} getUnitBn={getUnitBn} />
-              ))}
-            </div>
-          </section>
-        )}
+        {/* Filter Controls */}
+        <div className="flex items-center justify-between text-xs sm:text-sm text-gray-600">
+          <div>মোট {sortedProducts.length}টি পণ্য দেখানো হচ্ছে</div>
 
-        {/* Section: All Products */}
-        <section id="all-products-section" className="space-y-6 pt-2">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-gray-200/80 pb-4">
-            <div>
-              <h2 className="text-xl sm:text-2xl font-bold text-gray-900">সব পণ্য</h2>
-              <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
-                মোট {sortedProducts.length}টি পণ্য দেখানো হচ্ছে
-              </p>
-            </div>
+          <div className="flex items-center gap-2">
+            <span>সাজান</span>
+            <select
+              value={sortBy}
+              onChange={(e) => setSortBy(e.target.value as any)}
+              className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-800 focus:outline-none focus:border-[#008a45] shadow-xs"
+            >
+              <option value="default">ডিফল্ট</option>
+              <option value="low-to-high">দাম: কম থেকে বেশি</option>
+              <option value="high-to-low">দাম: বেশি থেকে কম</option>
+            </select>
+          </div>
+        </div>
 
-            <div className="flex items-center gap-2 self-end sm:self-auto">
-              <span className="text-xs sm:text-sm text-gray-600">সাজান</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value as any)}
-                className="bg-white border border-gray-300 rounded-lg px-3 py-1.5 text-xs sm:text-sm font-medium text-gray-800 focus:outline-none focus:border-[#008a45] shadow-xs"
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5">
+          {sortedProducts.map((product) => {
+            const isUp = product.change?.dir === 'up';
+            const isDown = product.change?.dir === 'down';
+
+            return (
+              <div
+                key={product.id}
+                className="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md transition-shadow"
               >
-                <option value="default">ডিফল্ট</option>
-                <option value="low-to-high">দাম: কম থেকে বেশি</option>
-                <option value="high-to-low">দাম: বেশি থেকে কম</option>
-              </select>
-            </div>
-          </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-xl shrink-0">
+                    {product.image || product.categoryIcon}
+                  </div>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
+                      {product.nameBn}
+                    </h3>
+                    <p className="text-xs text-gray-500 mt-0.5">
+                      প্রতি {getUnitBn(product.unit)}
+                    </p>
+                  </div>
+                </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5">
-            {sortedProducts.map((product) => (
-              <ProductCard key={product.id} product={product} getUnitBn={getUnitBn} />
-            ))}
-          </div>
-        </section>
-      </div>
-    </div>
-  );
-}
+                <div className="mt-6 flex items-baseline justify-between">
+                  <div>
+                    <p className="text-[11px] text-gray-400 font-medium">আজকের দাম</p>
+                    <p className="text-xl sm:text-2xl font-extrabold text-gray-900 mt-0.5">
+                      {product.today} <span className="text-base font-semibold">টাকা</span>
+                    </p>
+                  </div>
 
-function ProductCard({
-  product,
-  getUnitBn,
-}: {
-  product: Product;
-  getUnitBn: (unit: string) => string;
-}) {
-  const isUp = product.change?.dir === 'up';
-  const isDown = product.change?.dir === 'down';
-
-  return (
-    <div className="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-3">
-        <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-xl shrink-0">
-          {product.image || product.categoryIcon}
+                  {product.change && (
+                    <div
+                      className={`text-xs font-bold px-2.5 py-1 rounded-md flex items-center gap-1 ${
+                        isUp
+                          ? 'bg-red-50 text-red-600'
+                          : isDown
+                          ? 'bg-green-50 text-green-600'
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
+                    >
+                      {isUp ? '▲' : isDown ? '▼' : '—'} {Math.abs(product.change.pct)}%
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
         </div>
-        <div>
-          <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
-            {product.nameBn}
-          </h3>
-          <p className="text-xs text-gray-500 mt-0.5">
-            প্রতি {getUnitBn(product.unit)}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-6 flex items-baseline justify-between">
-        <div>
-          <p className="text-[11px] text-gray-400 font-medium">আজকের দাম</p>
-          <p className="text-xl sm:text-2xl font-extrabold text-gray-900 mt-0.5">
-            {product.today} <span className="text-base font-semibold">টাকা</span>
-          </p>
-        </div>
-
-        {product.change && (
-          <div
-            className={`text-xs font-bold px-2.5 py-1 rounded-md flex items-center gap-1 ${
-              isUp
-                ? 'bg-red-50 text-red-600'
-                : isDown
-                ? 'bg-green-50 text-green-600'
-                : 'bg-gray-100 text-gray-600'
-            }`}
-          >
-            {isUp ? '▲' : isDown ? '▼' : '—'} {Math.abs(product.change.pct)}%
-          </div>
-        )}
       </div>
     </div>
   );
