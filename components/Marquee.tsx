@@ -14,10 +14,22 @@ interface Product {
 }
 
 interface MarqueeProps {
-  products: Product[];
+  products?: Product[];
 }
 
-export default function Marquee({ products }: MarqueeProps) {
+// ডিফল্ট বাজার দরের ডাটা (ইংরেজি সংখ্যা দিয়ে সংশোধিত)
+const defaultProducts: Product[] = [
+  { id: 1, nameBn: 'চাল', unit: 'kg', today: 71, categoryIcon: '🍚', change: { dir: 'up', pct: 3.9 } },
+  { id: 2, nameBn: 'দুধ', unit: 'litre', today: 102, categoryIcon: '🥛', change: { dir: 'up', pct: 2.0 } },
+  { id: 3, nameBn: 'মাখন (১০০ গ্রাম)', unit: 'piece', today: 145, categoryIcon: '🧈', change: { dir: 'up', pct: 3.6 } },
+  { id: 4, nameBn: 'আদা', unit: 'kg', today: 85, categoryIcon: '🫚', change: { dir: 'down', pct: 9.0 } },
+  { id: 5, nameBn: 'রসুন', unit: 'kg', today: 125, categoryIcon: '🧄', change: { dir: 'down', pct: 7.4 } },
+  { id: 6, nameBn: 'মরিচ গুঁড়া', unit: 'kg', today: 245, categoryIcon: '🌶️', change: { dir: 'down', pct: 2.0 } },
+  { id: 7, nameBn: 'স্বর্ণা চাল', unit: 'kg', today: 48, categoryIcon: '🍚', change: { dir: 'up', pct: 2.1 } },
+  { id: 8, nameBn: 'মিনিকোট চাল', unit: 'kg', today: 99, categoryIcon: '🍚', change: { dir: 'down', pct: 2.9 } },
+];
+
+export default function Marquee({ products = defaultProducts }: MarqueeProps) {
   const getUnitBn = (unit: string) => {
     if (unit === 'kg') return 'কেজি';
     if (unit === 'litre') return 'লিটার';
@@ -26,7 +38,8 @@ export default function Marquee({ products }: MarqueeProps) {
     return unit;
   };
 
-  const marqueeItems = [...products, ...products];
+  const list = products && products.length > 0 ? products : defaultProducts;
+  const marqueeItems = [...list, ...list];
 
   return (
     <div className="bg-white border-b border-gray-200 py-3 overflow-hidden relative w-full">

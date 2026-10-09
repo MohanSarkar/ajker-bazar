@@ -1,34 +1,29 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
-import Navbar from '../components/Navbar';
-import Footer from '../components/Footer';
-import { Toaster } from 'react-hot-toast';
-
-const inter = Inter({ subsets: ['latin'] });
+import type { Metadata } from "next";
+import "./globals.css";
+import Navbar from "@/components/Navbar";
+import CategoryBar from "@/components/CategoryBar";
+import Marquee from "@/components/Marquee";
 
 export const metadata: Metadata = {
-  title: 'আজকের বাজার দর - নিত্যপ্রয়োজনীয় পণ্যের সঠিক দাম',
-  description: 'দৈনন্দিন বাজারের সঠিক ও হালনাগাদ তথ্য জানুন সহজেই।',
+  title: "Ajker Bazar Dor",
+  description: "Bilingual Market Price Tracker",
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="bn" data-theme="light">
-      <body 
-        className={`${inter.className} min-h-screen flex flex-col bg-base-100`}
-        suppressHydrationWarning={true}
-      >
-        <Toaster position="top-center" />
+    <html lang="bn">
+      <body className="bg-[#F3F5F2] min-h-screen">
+        {/* Global Header Elements */}
         <Navbar />
-        <main className="flex-1 container mx-auto px-4 py-6">
-          {children}
-        </main>
-        <Footer />
+        <CategoryBar />
+        <Marquee />
+
+        {/* Page Content */}
+        <main>{children}</main>
       </body>
     </html>
   );

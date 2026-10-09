@@ -1,46 +1,101 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
+import Link from "next/link";
+import { authClient } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
-interface NavbarProps {
-  onLogoClick?: () => void;
-}
+export default function Navbar() {
+  const { data: session, isPending } = authClient.useSession();
+  const router = useRouter();
 
-export default function Navbar({ onLogoClick }: NavbarProps) {
+  const handleSignOut = async () => {
+    await authClient.signOut({
+      fetchOptions: {
+        onSuccess: () => {
+          router.push("/");
+          router.refresh();
+        },
+      },
+    });
+  };
+
   return (
-    <nav className="w-full bg-white border-b border-gray-200 sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-        {/* Logo / Brand Name */}
-        <Link
-          href="/"
-          onClick={() => {
-            if (onLogoClick) onLogoClick();
-          }}
-          className="flex items-center gap-2.5 cursor-pointer hover:opacity-90 transition-opacity"
-        >
-          <div className="w-10 h-10 bg-[#008a45] rounded-xl flex items-center justify-center text-white text-xl font-bold shadow-xs">
-            🛒
+    <header className="w-full bg-white border-b border-gray-100 py-3 px-6">
+      <div className="max-w-7xl mx-auto flex items-center justify-between">
+        {/* Left: Logo & Title */}
+        <Link href="/" className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-[#058240] flex items-center justify-center text-white shadow-sm">
+            <svg
+              className="w-6 h-6 stroke-current"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth="1.8"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 0 0-3 3h15.75m-12.75-3h11.218c1.121 0 2.05-.828 2.193-1.942l.842-6.53a1.125 1.125 0 0 0-1.112-1.278H6.12M7.5 14.25 5.106 5.272M6 20.25a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Zm12 0a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+              />
+            </svg>
           </div>
           <div className="flex flex-col">
-            <span className="text-xl sm:text-2xl font-black text-gray-900 leading-none">
+            <span className="text-xl font-bold text-gray-900 leading-tight">
               বাজার দর
             </span>
-            <span className="text-[10px] text-gray-500 font-medium mt-0.5">
-              প্রয়োজনীয় পণ্যের দাম এক নজরে
+            <span className="text-xs text-gray-500 font-medium">
+              শুক্রবার, ৯ অক্টোবর, ২০২৬
             </span>
           </div>
         </Link>
 
-        {/* Auth Buttons */}
+        {/* Right: Auth Buttons */}
         <div className="flex items-center gap-3">
-          <button className="text-xs sm:text-sm font-semibold text-gray-700 hover:text-gray-900 px-3 py-2 rounded-lg hover:bg-gray-100 transition-colors">
-            সাইন ইন
-          </button>
-          <button className="bg-[#008a45] hover:bg-[#00753a] text-white text-xs sm:text-sm font-semibold px-4 py-2 rounded-xl shadow-xs transition-all active:scale-95">
-            সাইন আপ
-          </button>
+          {isPending ? (
+            <div className="w-20 h-9 bg-gray-100 animate-pulse rounded-lg"></div>
+          ) : session ? (
+            <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2">
+                {session.user.image ? (
+                  <img
+                    src={session.user.image}
+                    alt={session.user.name || "User"}
+                    className="w-8 h-8 rounded-full border border-gray-200 object-cover"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-full bg-emerald-100 text-[#058240] flex items-center justify-center font-bold text-sm">
+                    {session.user.name?.charAt(0) || "U"}
+                  </div>
+                )}
+                <span className="hidden sm:inline-block text-sm font-medium text-gray-800">
+                  {session.user.name}
+                </span>
+              </div>
+
+              <button
+                onClick={handleSignOut}
+                className="px-3.5 py-1.5 rounded-lg border border-red-200 text-red-600 hover:bg-red-50 text-xs font-semibold transition-colors"
+              >
+                সাইন আউট
+              </button>
+            </div>
+          ) : (
+            <div className="flex items-center gap-4">
+              <Link
+                href="/signin"
+                className="text-sm font-semibold text-gray-800 hover:text-[#058240] transition-colors"
+              >
+                সাইন ইন
+              </Link>
+              <Link
+                href="/signup"
+                className="px-5 py-2 rounded-xl bg-[#058240] hover:bg-[#046c35] text-white text-sm font-semibold transition-colors shadow-sm"
+              >
+                সাইন আপ
+              </Link>
+            </div>
+          )}
         </div>
       </div>
-    </nav>
+    </header>
   );
 }

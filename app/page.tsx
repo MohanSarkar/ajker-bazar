@@ -1,10 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import CategoryBar from '../components/CategoryBar';
-import Marquee from '../components/Marquee';
-import HeroBanner from '../components/HeroBanner';
+import HeroBanner from '@/components/HeroBanner';
 
 interface Product {
   id: number;
@@ -57,7 +55,7 @@ const FALLBACK_PRODUCTS: Product[] = [
 ];
 
 export default function HomePage() {
-  const [allProducts, setAllProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
+  const [allProducts] = useState<Product[]>(FALLBACK_PRODUCTS);
   const [sortBy, setSortBy] = useState<'default' | 'low-to-high' | 'high-to-low'>('default');
 
   const getUnitBn = (unit: string) => {
@@ -86,8 +84,8 @@ export default function HomePage() {
 
   return (
     <div className="bg-[#f4f6f4] min-h-screen pb-16">
-      <CategoryBar />
-      <Marquee products={allProducts} />
+      {/* CategoryBar ও Marquee এখান থেকে রিমুভ করা হয়েছে কারণ এগুলো layout.tsx-এ আছে */}
+      
       <HeroBanner onSeeAllClick={scrollToProducts} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-12">
@@ -171,7 +169,7 @@ function ProductCard({
   const isDown = product.change?.dir === 'down';
 
   return (
-    <Link href="/login" className="block group">
+    <Link href="/signin" className="block group">
       <div className="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md transition-all group-hover:border-[#008a45]/40 cursor-pointer">
         <div className="flex items-start gap-3">
           <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-transform">
