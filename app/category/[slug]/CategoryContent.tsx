@@ -47,9 +47,9 @@ const FALLBACK_PRODUCTS: Product[] = [
   { id: 24, slug: 'khasir-mangsho', nameBn: 'খাসির মাংস', category: 'mangsho', categoryNameBn: 'মাংস', categoryIcon: '🍗', unit: 'kg', image: '🍖', today: 1290, change: { dir: 'down', pct: -3 } },
   { id: 25, slug: 'hanser-mangsho', nameBn: 'হাঁসের মাংস', category: 'mangsho', categoryNameBn: 'মাংস', categoryIcon: '🍗', unit: 'kg', image: '🦆', today: 285, change: { dir: 'down', pct: -3.4 } },
   { id: 26, slug: 'dim', nameBn: 'ডিম', category: 'dim-dui', categoryNameBn: 'ডিম-দুধ', categoryIcon: '🥛', unit: 'dozen', image: '🥚', today: 158, change: { dir: 'up', pct: 3.9 } },
-  { id: 27, slug: 'dui-dudh', nameBn: 'দুধ', category: 'dim-dui', categoryNameBn: 'ডিম-দুধ', categoryIcon: '🥛', unit: 'litre', image: '🥛', today: 102, change: { dir: 'up', pct: 2 } },
-  { id: 28, slug: 'doi', nameBn: 'দই', category: 'dim-dui', categoryNameBn: 'ডিম-দুধ', categoryIcon: '🥛', unit: 'litre', image: '🥣', today: 92, change: { dir: 'flat', pct: 0 } },
-  { id: 29, slug: 'mokhhan', nameBn: 'মাখন (১০০ গ্রাম)', category: 'dim-dui', categoryNameBn: 'ডিম-দুধ', categoryIcon: '🥛', unit: 'piece', image: '🧈', today: 145, change: { dir: 'up', pct: 3.6 } },
+  { id: 27, slug: 'dui-dudh', nameBn: 'দুধ', category: 'dim-dui', categoryNameBn: 'দিম-দুধ', categoryIcon: '🥛', unit: 'litre', image: '🥛', today: 102, change: { dir: 'up', pct: 2 } },
+  { id: 28, slug: 'doi', nameBn: 'দই', category: 'dim-dui', categoryNameBn: 'দিম-দুধ', categoryIcon: '🥛', unit: 'litre', image: '🥣', today: 92, change: { dir: 'flat', pct: 0 } },
+  { id: 29, slug: 'mokhhan', nameBn: 'মাখন (১০০ গ্রাম)', category: 'dim-dui', categoryNameBn: 'দিম-দুধ', categoryIcon: '🥛', unit: 'piece', image: '🧈', today: 145, change: { dir: 'up', pct: 3.6 } },
   { id: 30, slug: 'ada', nameBn: 'আদা', category: 'mosla', categoryNameBn: 'মসলা', categoryIcon: '🌶️', unit: 'kg', image: '🫚', today: 85, change: { dir: 'up', pct: 9 } },
   { id: 31, slug: 'roshun', nameBn: 'রসুন', category: 'mosla', categoryNameBn: 'মসলা', categoryIcon: '🌶️', unit: 'kg', image: '🧄', today: 125, change: { dir: 'down', pct: -7.4 } },
 ];
@@ -65,11 +65,11 @@ const categoryMeta: Record<string, { nameBn: string; icon: string }> = {
   mosla: { nameBn: 'মসলা', icon: '🌶️' },
 };
 
-export default function CategoryContent({
-  params,
-}: {
+interface CategoryContentProps {
   params: Promise<{ slug: string }>;
-}) {
+}
+
+export default function CategoryContent({ params }: CategoryContentProps) {
   const { slug } = use(params);
   const [sortBy, setSortBy] = useState<'default' | 'low-to-high' | 'high-to-low'>('default');
 
@@ -92,7 +92,7 @@ export default function CategoryContent({
 
   return (
     <div className="bg-[#f4f6f4] min-h-screen pb-16">
-      <CategoryBar selectedCategory={slug} />
+      <CategoryBar />
       <Marquee products={FALLBACK_PRODUCTS} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 space-y-6">
