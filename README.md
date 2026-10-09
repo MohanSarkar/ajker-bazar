@@ -1,63 +1,54 @@
-# 🛒 বাজার দর (BazarDor)
+# 🛒 bajar dor (BazarDor)
 
-> **Real-Time Essential Market Price Tracking & Comparison Web Application in Bangladesh**  
-> Designed and built with a modern, high-performance tech stack.
+> **real-time essential market price tracking & comparison web application in bangladesh**  
+> designed and built with a modern, high-performance tech stack.
 
-[![Next.js](https://img.shields.io/badge/Next.js_15-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
-[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
-[![Better Auth](https://img.shields.io/badge/Better_Auth-058240?style=flat-square&logo=security&logoColor=white)](https://better-auth.com/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg?style=flat-square)](LICENSE)
-
----
-
-## 🌟 Overview
-
-**Bazar Dor** is a robust, responsive web platform designed to monitor and track daily essential commodity prices across various markets in Bangladesh. It bridges the information gap for everyday consumers by providing up-to-date pricing trends, market fluctuations, and detailed statistical insights.
+[![next.js](https://img.shields.io/badge/next.js_15-black?style=flat-square&logo=next.js&logoColor=white)](https://nextjs.org/)
+[![typescript](https://img.shields.io/badge/typescript-007ACC?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![tailwind css](https://img.shields.io/badge/tailwind_css-38B2AC?style=flat-square&logo=tailwind-css&logoColor=white)](https://tailwindcss.com/)
+[![better auth](https://img.shields.io/badge/better_auth-058240?style=flat-square&logo=security&logoColor=white)](https://better-auth.com/)
+[![license: mit](https://img.shields.io/badge/license-mit-yellow.svg?style=flat-square)](license)
 
 ---
 
-## 🚀 Key Features
+## 🌟 overview
 
-1. **Live Price Ticker Marquee**  
-   * Displays continuous real-time scrolling updates for trending essential items, highlighting daily price changes with directional trend indicators (`▲` / `▼`).
-2. **Dynamic Market Categorization & Grids**  
-   * Structured home layout featuring specialized sections such as **Top Price Risers**, **Top Price Fallers**, and a comprehensive searchable catalog of all market goods.
-3. **Advanced Market-Wise Price Comparison (`/product/[slug]`)**  
-   * In-depth analytical views for individual products showcasing minimum, maximum, and average prices alongside specific market vendor breakdowns.
-4. **Secure Multi-Provider Authentication**  
-   * Powered by **Better Auth** supporting secure credential logins (Email/Password) as well as seamless Social OAuth integrations (Google & GitHub) with session state management.
-5. **Smart Sorting & Responsive Architecture**  
-   * Fully mobile-optimized user interface built with Tailwind CSS, featuring efficient local state filtering, sorting utilities, and clean component-driven design patterns.
+**bazar dor** is a robust, responsive web platform designed to monitor and track daily essential commodity prices across various markets in bangladesh. it bridges the information gap for everyday consumers by providing up-to-date pricing trends, market fluctuations, and detailed statistical insights.
 
 ---
 
-## 🛠️ Tech Stack
+## 🚀 key features
 
-* **Core Framework:** Next.js 15 (App Router, Server Components, Dynamic Routing)
-* **Language:** TypeScript (Strict type-safety across models and API layers)
-* **Styling & UI:** Tailwind CSS (Utility-first, highly responsive design)
-* **Authentication:** Better Auth (Secure token & session handling)
-* **Architecture:** Component-based scalable folder structure with custom React hooks
+1. **live price ticker marquee**  
+   * displays continuous real-time scrolling updates for trending essential items, highlighting daily price changes with directional trend indicators (`▲` / `▼`).
+2. **dynamic market categorization & grids**  
+   * structured home layout featuring specialized sections such as **top price risers**, **top price fallers**, and a comprehensive searchable catalog of all market goods.
+3. **advanced market-wise price comparison (`/product/[slug]`)**  
+   * in-depth analytical views for individual products showcasing minimum, maximum, and average prices alongside specific market vendor breakdowns.
+4. **secure multi-provider authentication**  
+   * powered by **better auth** supporting secure credential logins (email/password) as well as seamless social oauth integrations (google & github) with session state management.
+5. **smart sorting & responsive architecture**  
+   * fully mobile-optimized user interface built with tailwind css, featuring efficient local state filtering, sorting utilities, and clean component-driven design patterns.
 
 ---
 
-## 💻 Getting Started Locally
+## 🛠️ tech stack
 
-To run this project on your local machine, follow these simple steps:
+* **core framework:** next.js 15 (app router, server components, dynamic routing)
+* **language:** typescript (strict type-safety across models and api layers)
+* **styling & ui:** tailwind css (utility-first, highly responsive design)
+* **authentication:** better auth (secure token & session handling)
+* **architecture:** component-based scalable folder structure with custom react hooks
 
-```bash
-# 1. Clone the repository
-git clone [https://github.com/your-username/bazar-dor.git](https://github.com/your-username/bazar-dor.git)
+---
 
-# 2. Navigate to the project directory
-cd bazar-dor
+## 📬 contact & author
 
-# 3. Install dependencies
-npm install
+created and maintained by **mohan sarkar**. if you would like to get in touch, collaborate, or discuss potential opportunities, feel free to reach out:
 
-# 4. Configure environment variables
-# Create a .env.local file in the root directory and add your auth/database credentials
-
-# 5. Run the development server
-npm run dev
+* **name:** mohan sarkar
+* **role:** full-stack web developer
+* **email:** mohan.sarkar.dev@gmail.com
+* **phone / whatsapp:** +971 xx xxx xxxx
+* **location:** dubai, uae
+* **portfolio / github:** [github.com/mohansarkar](https://github.com)
