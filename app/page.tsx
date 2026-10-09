@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import CategoryBar from '../components/CategoryBar';
 import Marquee from '../components/Marquee';
 import HeroBanner from '../components/HeroBanner';
@@ -96,7 +97,7 @@ export default function HomePage() {
             <div className="flex items-center gap-2">
               <span className="text-red-500 font-bold text-lg">▲</span>
               <h2 className="text-xl sm:text-2xl font-bold text-gray-900">
-                আজ দাম বেড়েছে
+                আজ দাম বেড়েছে
               </h2>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5">
@@ -170,43 +171,45 @@ function ProductCard({
   const isDown = product.change?.dir === 'down';
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md transition-shadow">
-      <div className="flex items-start gap-3">
-        <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-xl shrink-0">
-          {product.image || product.categoryIcon}
-        </div>
-        <div>
-          <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight">
-            {product.nameBn}
-          </h3>
-          <p className="text-xs text-gray-500 mt-0.5">
-            প্রতি {getUnitBn(product.unit)}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-6 flex items-baseline justify-between">
-        <div>
-          <p className="text-[11px] text-gray-400 font-medium">আজকের দাম</p>
-          <p className="text-xl sm:text-2xl font-extrabold text-gray-900 mt-0.5">
-            {product.today} <span className="text-base font-semibold">টাকা</span>
-          </p>
-        </div>
-
-        {product.change && (
-          <div
-            className={`text-xs font-bold px-2.5 py-1 rounded-md flex items-center gap-1 ${
-              isUp
-                ? 'bg-red-50 text-red-600'
-                : isDown
-                ? 'bg-green-50 text-green-600'
-                : 'bg-gray-100 text-gray-600'
-            }`}
-          >
-            {isUp ? '▲' : isDown ? '▼' : '—'} {Math.abs(product.change.pct)}%
+    <Link href="/login" className="block group">
+      <div className="bg-white rounded-2xl border border-gray-200/90 p-5 shadow-xs hover:shadow-md transition-all group-hover:border-[#008a45]/40 cursor-pointer">
+        <div className="flex items-start gap-3">
+          <div className="w-10 h-10 bg-red-50 rounded-xl flex items-center justify-center text-xl shrink-0 group-hover:scale-105 transition-transform">
+            {product.image || product.categoryIcon}
           </div>
-        )}
+          <div>
+            <h3 className="text-base sm:text-lg font-bold text-gray-900 leading-tight group-hover:text-[#008a45] transition-colors">
+              {product.nameBn}
+            </h3>
+            <p className="text-xs text-gray-500 mt-0.5">
+              প্রতি {getUnitBn(product.unit)}
+            </p>
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-baseline justify-between">
+          <div>
+            <p className="text-[11px] text-gray-400 font-medium">আজকের দাম</p>
+            <p className="text-xl sm:text-2xl font-extrabold text-gray-900 mt-0.5">
+              {product.today} <span className="text-base font-semibold">টাকা</span>
+            </p>
+          </div>
+
+          {product.change && (
+            <div
+              className={`text-xs font-bold px-2.5 py-1 rounded-md flex items-center gap-1 ${
+                isUp
+                  ? 'bg-red-50 text-red-600'
+                  : isDown
+                  ? 'bg-green-50 text-green-600'
+                  : 'bg-gray-100 text-gray-600'
+              }`}
+            >
+              {isUp ? '▲' : isDown ? '▼' : '—'} {Math.abs(product.change.pct)}%
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </Link>
   );
 }
