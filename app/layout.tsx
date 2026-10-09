@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import CategoryBar from "@/components/CategoryBar";
@@ -17,6 +18,9 @@ export default function RootLayout({
   return (
     <html lang="bn">
       <body className="bg-[#F3F5F2] min-h-screen" suppressHydrationWarning={true}>
+        {/* টোস্ট নোটিফিকেশন কম্পোনেন্ট */}
+        <Toaster position="top-center" reverseOrder={false} />
+
         {/* Global Header Elements */}
         <Navbar />
         <CategoryBar />

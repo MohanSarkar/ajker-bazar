@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import toast from "react-hot-toast"; // ১. টোস্ট ইম্পোর্ট করা হলো
 
 export default function Navbar() {
   const { data: session, isPending } = authClient.useSession();
@@ -12,8 +13,12 @@ export default function Navbar() {
     await authClient.signOut({
       fetchOptions: {
         onSuccess: () => {
+          toast.success("সফলভাবে সাইন আউট করা হয়েছে!"); // ২. সফল সাইন আউটের টোস্ট
           router.push("/");
           router.refresh();
+        },
+        onError: (ctx) => {
+          toast.error(ctx.error.message || "সাইন আউট করতে সমস্যা হয়েছে");
         },
       },
     });
