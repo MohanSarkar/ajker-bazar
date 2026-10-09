@@ -16,7 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="bn">
-      <body className="bg-[#F3F5F2] min-h-screen">
+      <body className="bg-[#F3F5F2] min-h-screen" suppressHydrationWarning={true}>
         {/* Global Header Elements */}
         <Navbar />
         <CategoryBar />

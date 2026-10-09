@@ -117,18 +117,17 @@ function ProductDetailContent({ slug }: { slug: string }) {
     if (!session || !slug) return;
 
     const fetchProductData = async () => {
-      try {
-        setLoading(true);
-        const res = await fetch(`https://api.abcz.workers.dev/api/bazardor/products/${slug}`);
-        
-        const mappedInfo = PRODUCT_MAP[slug] || {
-          nameBn: slug.split('-').join(' '),
-          categoryNameBn: 'পণ্য',
-          categorySlug: 'all',
-          icon: '📦',
-          unit: 'কেজি',
-        };
+      setLoading(true);
+      const mappedInfo = PRODUCT_MAP[slug] || {
+        nameBn: slug.split('-').join(' '),
+        categoryNameBn: 'পণ্য',
+        categorySlug: 'all',
+        icon: '📦',
+        unit: 'কেজি',
+      };
 
+      try {
+        const res = await fetch(`https://api.abcz.workers.dev/api/bazardor/products/${slug}`);
         if (res.ok) {
           const apiData = await res.json();
           const basePrice = apiData.todayPrice || apiData.today || 46;
@@ -150,27 +149,29 @@ function ProductDetailContent({ slug }: { slug: string }) {
             },
             marketPrices: getFullMarketPrices(basePrice),
           });
-        } else {
-          const basePrice = 46;
-          setProduct({
-            slug: slug,
-            nameBn: mappedInfo.nameBn,
-            categoryNameBn: mappedInfo.categoryNameBn,
-            categorySlug: mappedInfo.categorySlug,
-            unit: mappedInfo.unit,
-            icon: mappedInfo.icon,
-            todayPrice: basePrice,
-            priceChangePct: 4.5,
-            changeDir: 'up',
-            summary: { minPrice: basePrice - 5, maxPrice: basePrice + 5, avgPrice: basePrice },
-            marketPrices: getFullMarketPrices(basePrice),
-          });
+          setLoading(false);
+          return;
         }
       } catch (err) {
-        console.error('API Fetching Error:', err);
-      } finally {
-        setLoading(false);
+        console.warn('Live API fetch failed, using robust fallback data:', err);
       }
+
+      // Safe Fallback logic when fetch fails or network blocks
+      const basePrice = 46;
+      setProduct({
+        slug: slug,
+        nameBn: mappedInfo.nameBn,
+        categoryNameBn: mappedInfo.categoryNameBn,
+        categorySlug: mappedInfo.categorySlug,
+        unit: mappedInfo.unit,
+        icon: mappedInfo.icon,
+        todayPrice: basePrice,
+        priceChangePct: 4.5,
+        changeDir: 'up',
+        summary: { minPrice: basePrice - 5, maxPrice: basePrice + 5, avgPrice: basePrice },
+        marketPrices: getFullMarketPrices(basePrice),
+      });
+      setLoading(false);
     };
 
     fetchProductData();
@@ -358,11 +359,7 @@ export default function PrivateProductDetailPage({
         </div>
       }
     >
-      <PrivateProductDetailPageInner slug={slug} />
+      <ProductDetailContent slug={slug} />
     </Suspense>
   );
-}
-
-function PrivateProductDetailPageInner({ slug }: { slug: string }) {
-  return <ProductDetailContent slug={slug} />;
 }
