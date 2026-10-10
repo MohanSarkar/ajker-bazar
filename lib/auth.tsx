@@ -2,7 +2,6 @@ import { betterAuth } from "better-auth";
 import { mongodbAdapter } from "better-auth/adapters/mongodb";
 import clientPromise from "./db";
 
-// MongoDB client Resolve করে db instance বের করা
 const client = await clientPromise;
 const db = client.db();
 
