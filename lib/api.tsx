@@ -1,6 +1,6 @@
 import { Category, Product } from '@/types';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || '';
+const BASE_URL = 'https://api.abcz.workers.dev';
 
 export async function getCategories(): Promise<Category[]> {
   const res = await fetch(`${BASE_URL}/api/bazardor/categories`, { cache: 'no-store' });
