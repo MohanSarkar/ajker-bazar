@@ -18,7 +18,13 @@ export async function getProducts(category?: string): Promise<Product[]> {
 }
 
 export async function getProductById(id: string): Promise<Product | null> {
-  const res = await fetch(`${BASE_URL}/api/bazardor/products/${id}`, { cache: 'no-store' });
-  if (!res.ok) return null;
-  return res.json();
+  try {
+    const products: Product[] = await getProducts();
+    const product = products.find(
+      (p: Product & { slug?: string }) => p.slug === id || String(p.id) === id
+    );
+    return product || null;
+  } catch (error) {
+    return null;
+  }
 }
